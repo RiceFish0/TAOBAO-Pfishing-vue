@@ -1,5 +1,5 @@
 <script setup>
-import qrCodeImage from '@/assets/陶寶釣魚網頁-VaRBo2.png' // 模擬引用圖片
+import qrCodeImage from '../assets/陶寶釣魚網頁-VaRBo2.png' // 模擬引用圖片
 
 const emit = defineEmits(['navigate'])
 

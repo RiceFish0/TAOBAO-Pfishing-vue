@@ -1,5 +1,5 @@
 <script setup>
-import taobaoLogo from '@/assets/淘寶logo.png' 
+import taobaoLogo from '../assets/淘寶logo.png'
 
 const emit = defineEmits(['navigate'])
 
