@@ -1,0 +1,52 @@
+# 腳本名稱
+name: Deploy static content to Pages
+
+# 觸發條件：當原始碼推送到 main 分支時執行
+on:
+  push:
+    branches: ['main'] # ??如果你的預設分支叫 master，請把這裡改成 ['master']
+
+# 設定 GitHub Token 的權限，允許腳本將檔案寫入 GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 確保同時只有一個部署任務在執行
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest # 使用最新的 Ubuntu 雲端伺服器
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # 設定 Node.js 版本
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install # 自動安裝套件 (相當於你在本地打 npm install)
+
+      - name: Build
+        run: npm run build # 自動打包 (相當於你在本地打 npm run build)
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist' # 告訴 GitHub 上傳打包好的 dist 資料夾
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
